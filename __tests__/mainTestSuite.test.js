@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
 const db = require("../db/connection");
 
+
 beforeEach(() => {
   return seed(data);
 });
@@ -31,13 +32,22 @@ describe('GET /api/topics', () => {
         .get('/api/topics')
         .expect(200)
     });
-    xit('GET:404 sends an appropriate status and response message when there is nothing in the data base' , () => {
-        db.query(`DELETE FROM topics`)
+});
+
+describe('GET /api', () => {
+    it('should respond with an accurate JSON describing other endpoints', () => {
         return request(app)
-        .get('/api/topics')
-        .expect(404)
+        .get('/api')
+        .expect(200)
         .then((response) => {
-            expect(response.body.msg).toBe('No topics exist')
+            const data = response.body.endpoints
+            expect(Object.keys(data)).toEqual(['GET /api', 'GET /api/topics', 'GET /api/articles'])
+            const endpointKeys = ['description', 'queries', 'exampleResponse']
+            for (endpoint in data){
+                const item = data[endpoint]
+                expect(Object.keys(item)).toEqual(endpointKeys)
+
+            }
         })
     });
 });
