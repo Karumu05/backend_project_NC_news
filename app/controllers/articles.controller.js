@@ -1,5 +1,6 @@
 const {
     selectArticleById,
+    getArticlesWithCommentCount,
 } = require('../models/articles.model')
 
 exports.getArticleById = (request, response, next) => {
@@ -9,5 +10,15 @@ exports.getArticleById = (request, response, next) => {
     })
     .catch((error) => {
         next(error)
+    })
+}
+
+exports.getAllArticles = (request, response, next) => {
+    const {author, topic} = request.query
+    getArticlesWithCommentCount(author, topic).then((result) => {
+        response.status(200).send({articles: result})
+    })
+    .catch((err) => {
+        next(err)
     })
 }

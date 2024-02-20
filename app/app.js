@@ -6,12 +6,14 @@ const {
 } = require('./controllers/topics')
 const {
     getArticleById,
+    getAllArticles,
 } = require('./controllers/articles.controller')
 
 
 app.get('/api/topics', getTopics)
 app.get('/api', getEndpoints)
 app.get('/api/articles/:article_id', getArticleById)
+app.get('/api/articles', getAllArticles)
 
 
 app.use((err, request, response, next) => {
