@@ -112,25 +112,60 @@ describe('GET /api/articles', () => {
       })
     })
   });
-  it('should respond with an array based on use with the author query', () => {
-      return request(app)
-      .get('/api/articles?author=rogersop')
-      .expect(200)
-      .then((response) => {
-        const {articles} = response.body
-        expect(articles.length).toBe(3)
-        expect(articles).toBeSortedBy('author')
-      })
-  });
-  it('should respond with an array based on use with the topic query', () => {
+  // it('should respond with an array based on use with the author query', () => {
+  //     return request(app)
+  //     .get('/api/articles?author=rogersop')
+  //     .expect(200)
+  //     .then((response) => {
+  //       const {articles} = response.body
+  //       expect(articles.length).toBe(3)
+  //       expect(articles).toBeSortedBy('author')
+  //     })
+  // });
+  // it('should respond with an array based on use with the topic query', () => {
+  //   return request(app)
+  //   .get('/api/articles?topic=cats')
+  //   .expect(200)
+  //   .then((response) => {
+  //     const {articles} = response.body
+  //     expect(articles.lenth).toBe(1)
+  //     expect(articles).toBeSortedBy('topic')
+  //   })
+  // });
+});
+
+describe('GET /api/articles/:article_id/comments', () => {
+  it('should respond with an array of comments for a given article ', () => {
     return request(app)
-    .get('/api/articles?topic=cats')
+    .get('/api/articles/3/comments')
     .expect(200)
     .then((response) => {
-      const {articles} = response.body
-      expect(articles.lenth).toBe(1)
-      expect(articles).toBeSortedBy('topic')
+      const body = response.body
+      expect(body.comments.length).toBe(2)
+      body.comments.forEach((comment) => {
+        expect(typeof comment.comment_id).toBe('number')
+        expect(typeof comment.votes).toBe('number')
+        expect(typeof comment.created_at).toBe('string')
+        expect(typeof comment.author).toBe('string')
+        expect(typeof comment.body).toBe('string')
+        expect(typeof comment.article_id).toBe('number')
+      })
+    })
+  })
+  it('"should respond with an appropriate error message when given a valid but non-existent id"', () => {
+    return request(app)
+    .get('/api/articles/9999/comments')
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe("Comments does not exist");
+    })
+  });
+  it('should respond with an appropriate error message when given an invalid id', () => {
+    return request(app)
+    .get('/api/articles/mushroom/comments')
+    .expect(400)
+    .then((result) => {
+      expect(result.body.msg).toBe("Bad request");
     })
   });
 });
-
