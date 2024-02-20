@@ -88,3 +88,49 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 });
+
+describe('GET /api/articles', () => {
+  it('should respond with a full array list of every article within the database', () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then((response) => {
+      const body = response.body
+      expect(body.articles.length).toBe(13)
+      body.articles.forEach((article) => {
+        expect(typeof article['author']).toBe('string')
+        expect(typeof article['title']).toBe('string')
+        expect(typeof article['article_id']).toBe('number')
+        expect(typeof article['topic']).toBe('string')
+        expect(typeof article['created_at']).toBe('string')
+        expect(typeof article['votes']).toBe('number')
+        expect(typeof article['article_img_url']).toBe('string')
+        expect(typeof article['comment_count']).toBe('number')
+        if (article['article_id'] === 1){
+          expect(article['comment_count']).toBe(11)
+        }
+      })
+    })
+  });
+  it('should respond with an array based on use with the author query', () => {
+      return request(app)
+      .get('/api/articles?author=rogersop')
+      .expect(200)
+      .then((response) => {
+        const {articles} = response.body
+        expect(articles.length).toBe(3)
+        expect(articles).toBeSortedBy('author')
+      })
+  });
+  it('should respond with an array based on use with the topic query', () => {
+    return request(app)
+    .get('/api/articles?topic=cats')
+    .expect(200)
+    .then((response) => {
+      const {articles} = response.body
+      expect(articles.lenth).toBe(1)
+      expect(articles).toBeSortedBy('topic')
+    })
+  });
+});
+
