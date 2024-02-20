@@ -1,6 +1,7 @@
 const {
     selectArticleById,
     getArticlesWithCommentCount,
+    selectCommentById,
 } = require('../models/articles.model')
 
 exports.getArticleById = (request, response, next) => {
@@ -20,5 +21,15 @@ exports.getAllArticles = (request, response, next) => {
     })
     .catch((err) => {
         next(err)
+    })
+}
+
+exports.getCommentsByArticle = (request, response, next) => {
+    const {article_id} = request.params
+    selectCommentById(article_id).then((result) => {
+        response.status(200).send({comments: result})
+    })
+    .catch((error) => {
+        next(error)
     })
 }
