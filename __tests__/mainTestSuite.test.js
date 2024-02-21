@@ -121,26 +121,6 @@ describe('GET /api/articles', () => {
       expect(articles).toBeSortedBy('created_at', {descending: true})
     })
   });
-  // it('should respond with an array based on use with the author query', () => {
-  //     return request(app)
-  //     .get('/api/articles?author=rogersop')
-  //     .expect(200)
-  //     .then((response) => {
-  //       const {articles} = response.body
-  //       expect(articles.length).toBe(3)
-  //       expect(articles).toBeSortedBy('author')
-  //     })
-  // });
-  // it('should respond with an array based on use with the topic query', () => {
-  //   return request(app)
-  //   .get('/api/articles?topic=cats')
-  //   .expect(200)
-  //   .then((response) => {
-  //     const {articles} = response.body
-  //     expect(articles.lenth).toBe(1)
-  //     expect(articles).toBeSortedBy('topic')
-  //   })
-  // });
 });
 
 describe('GET /api/articles/:article_id/comments', () => {
@@ -157,16 +137,26 @@ describe('GET /api/articles/:article_id/comments', () => {
         expect(typeof comment.created_at).toBe('string')
         expect(typeof comment.author).toBe('string')
         expect(typeof comment.body).toBe('string')
-        expect(typeof comment.article_id).toBe('number')
+        expect(comment.article_id).toBe(3)
       })
     })
   })
+  it('should respond with an empty array when there are no comments on the given article_id', () => {
+    return request(app)
+    .get('/api/articles/2/comments')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.comments.length).toBe(0)
+      expect(Array.isArray(response.body.comments)).toBe(true)
+    })
+
+  });
   it('"should respond with an appropriate error message when given a valid but non-existent id"', () => {
     return request(app)
     .get('/api/articles/9999/comments')
     .expect(404)
     .then((result) => {
-      expect(result.body.msg).toBe("Comments does not exist");
+      expect(result.body.msg).toBe("Not found");
     })
   });
   it('should respond with an appropriate error message when given an invalid id', () => {
@@ -206,7 +196,7 @@ describe('POST /api/articles/:article_id/comments', () => {
     })
     .expect(404)
     .then((result) => {
-      expect(result.body.msg).toBe('Invalid inputted data')
+      expect(result.body.msg).toBe('Not found')
     })
   });
   it('should respond with an appropriate error message when given an invalid id ', () => {
@@ -241,7 +231,7 @@ describe('POST /api/articles/:article_id/comments', () => {
     })
     .expect(404)
     .then((result) => {
-      expect(result.body.msg).toBe('Invalid inputted data')
+      expect(result.body.msg).toBe('Not found')
     })
   });
 });

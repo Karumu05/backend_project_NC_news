@@ -25,7 +25,7 @@ app.post('/api/articles/:article_id/comments', postCommentByArticle)
 app.use((err, request, response, next) => {
 
     if (err.code === '23503'){
-        response.status(404).send({msg: 'Invalid inputted data'})
+        response.status(404).send({msg: 'Not found'})
     }
 
     if (err.code === '22P02'){

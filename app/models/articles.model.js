@@ -50,8 +50,7 @@ ORDER BY
 };
 
 exports.selectCommentById = (article_id) => {
-  return db
-    .query(
+  return db.query(
       `
 SELECT
  comment_id, votes, created_at, author, body, article_id
@@ -61,13 +60,10 @@ WHERE
  article_id = $1
 ORDER BY
  created_at DESC;
-`,
-      [article_id]
-    )
+`,[article_id])
     .then((result) => {
-      if (result.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "Comments does not exist" });
-      }
+  
+
       return result.rows;
     });
 };
