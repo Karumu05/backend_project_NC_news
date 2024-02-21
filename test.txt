@@ -1,7 +1,0 @@
-You are now connected to database "nc_news_test" as user "calum".
- comment_id | votes |     created_at      |    author     |                                                     body                                                     | article_id 
-------------+-------+---------------------+---------------+--------------------------------------------------------------------------------------------------------------+------------
-         15 |     1 | 2020-11-24 00:08:00 | butter_bridge | I am 100% sure that we're not completely sure.                                                               |          5
-         14 |    16 | 2020-06-09 06:00:00 | icellusedkars | What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge. |          5
-(2 rows)
-

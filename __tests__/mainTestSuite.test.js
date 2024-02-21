@@ -112,6 +112,15 @@ describe('GET /api/articles', () => {
       })
     })
   });
+  it('should respond with an array of every article in decending order', () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then((response) => {
+      const {articles} = response.body
+      expect(articles).toBeSortedBy('created_at', {descending: true})
+    })
+  });
   // it('should respond with an array based on use with the author query', () => {
   //     return request(app)
   //     .get('/api/articles?author=rogersop')
