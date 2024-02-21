@@ -1,5 +1,5 @@
 const db = require("../../db/connection");
-const format = require("pg-format");
+const { format } = require("pg-format");
 
 exports.selectArticleById = (article_id) => {
   return db
@@ -65,9 +65,30 @@ ORDER BY
       [article_id]
     )
     .then((result) => {
-        if (result.rows.length === 0){
-            return Promise.reject({ status: 404, msg: "Comments does not exist" });
-        }
+      if (result.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Comments does not exist" });
+      }
       return result.rows;
     });
+};
+
+exports.insertCommentToArticle = (body, article_id) => {
+
+
+if (!body.username || !body.body || !article_id){
+  return Promise.reject({status: 400, msg: 'Bad request'})
+}
+
+  const queryVals = [article_id, body.username, body.body];
+
+  const queryStr = `
+INSERT INTO 
+  comments (article_id, author, body)
+VALUES
+  ($1, $2, $3)
+RETURNING *;`;
+
+  return db.query(queryStr, queryVals).then((result) => {
+    return result.rows;
+  });
 };
