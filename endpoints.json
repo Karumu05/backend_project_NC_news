@@ -63,5 +63,21 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "Adds a comment to a specific article chosen by id",
+    "queries": [],
+    "exampleResponse": {
+      "addedComment": [
+        {
+        "comment_id": 19,
+        "body": "Commenting, commenting everyone loves to comment",
+        "article_id": 2,
+        "author": "butter_bridge",
+        "votes": 0,
+        "created_at": "2024-02-21T11:31:06.799Z"
+        }
+      ]
+    }
   }
 }

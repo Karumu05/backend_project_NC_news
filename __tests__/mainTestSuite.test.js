@@ -169,3 +169,70 @@ describe('GET /api/articles/:article_id/comments', () => {
     })
   });
 });
+
+describe('POST /api/articles/:article_id/comments', () => {
+  it('should add a new comment to an article referenced by its id', () => {
+    return request(app)
+    .post('/api/articles/2/comments')
+    .send({
+      username: 'butter_bridge',
+      body: 'Commenting, commenting everyone loves to comment'
+    })
+    .expect(201)
+    .then((result) => {
+      const body = result.body
+      expect(body.addedComment.length).toBe(1)
+      body.addedComment.forEach((comment) => {
+        expect(typeof comment['author']).toBe('string')
+        expect(typeof comment['body']).toBe('string')
+      })
+    })
+  });
+  it('should respond with an appropriate error message when given a valid but non-existent id', () => {
+    return request(app)
+    .post('/api/articles/99999/comments')
+    .send({
+      username: 'butter_bridge',
+      body: 'Commenting, commenting everyone loves to comment'
+    })
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe('Invalid inputted data')
+    })
+  });
+  it('should respond with an appropriate error message when given an invalid id ', () => {
+      return request(app)
+      .post('/api/articles/mushrooom/comments')
+      .send({
+        username: 'butter_bridge',
+        body: 'Commenting, commenting everyone loves to comment'
+      })
+      .expect(400)
+      .then((result) => {
+        expect(result.body.msg).toBe('Bad request')
+      })
+  });
+  it('should respond with an appropriate error message when needed input data is missing', () => {
+    return request(app)
+    .post('/api/articles/2/comments')
+    .send({
+      body: 'Commenting, commenting everyone loves to comment'
+    })
+    .expect(400)
+    .then((result) => {
+      expect(result.body.msg).toBe('Bad request')
+    })
+  });
+  it('should respond with the appropriate error message when a non valid username is being inputted', () => {
+    return request(app)
+    .post('/api/articles/2/comments')
+    .send({
+      username: 'IAMaCommentor',
+      body: 'Commenting, commenting everyone loves to comment'
+    })
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe('Invalid inputted data')
+    })
+  });
+});

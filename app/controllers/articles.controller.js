@@ -2,6 +2,7 @@ const {
     selectArticleById,
     getArticlesWithCommentCount,
     selectCommentById,
+    insertCommentToArticle,
 } = require('../models/articles.model')
 
 exports.getArticleById = (request, response, next) => {
@@ -31,5 +32,16 @@ exports.getCommentsByArticle = (request, response, next) => {
     })
     .catch((error) => {
         next(error)
+    })
+}
+
+exports.postCommentByArticle = (request, response, next) => {
+    const {body} = request
+    const {article_id} = request.params
+    insertCommentToArticle(body, article_id).then((result) => {
+        response.status(201).send({addedComment: result})
+    })
+    .catch((error) => {
+        next(error);
     })
 }
