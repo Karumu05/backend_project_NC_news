@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
 const db = require("../db/connection");
 
+
 beforeEach(() => {
   return seed(data);
 });
@@ -313,5 +314,22 @@ describe('DELETE /api/comments/:comment_id', () => {
       .then((result) => {
         expect(result.body.msg).toBe('Bad request')
       })
+  });
+});
+
+describe('GET /api/users', () => {
+  it('should respond with an array of users and a 200 status code', () => {
+    return request(app)
+    .get('/api/users')
+    .expect(200)
+    .then((result) => {
+      const {body} = result
+      expect(Array.isArray(body.users)).toBe(true)
+      body.users.forEach((user) => {
+        expect(user).toHaveProperty('username')
+        expect(user).toHaveProperty('name')
+        expect(user).toHaveProperty('avatar_url')
+      })
+    })
   });
 });

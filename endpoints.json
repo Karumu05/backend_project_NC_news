@@ -100,5 +100,14 @@
     "exampleResponse": {
       "Status": 204
     }
+  },
+  "GET /api/users": {
+    "description": "Will serve all users",
+    "queries": [],
+    "exampleResponse": {
+      "username": "butter_bridge",
+        "name": "jonny",
+        "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+    }
   }
 }

@@ -14,6 +14,9 @@ const {
 const {
     deleteCommentById,
 } = require('./controllers/comments.controller')
+const {
+    getAllUsers,
+} = require('../app/controllers/users.controller')
 
 app.use(express.json())
 
@@ -22,6 +25,7 @@ app.get('/api', getEndpoints)
 app.get('/api/articles/:article_id', getArticleById)
 app.get('/api/articles', getAllArticles)
 app.get('/api/articles/:article_id/comments', getCommentsByArticle)
+app.get('/api/users', getAllUsers)
 
 app.post('/api/articles/:article_id/comments', postCommentByArticle)
 
