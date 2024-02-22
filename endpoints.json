@@ -70,12 +70,12 @@
     "exampleResponse": {
       "addedComment": [
         {
-        "comment_id": 19,
-        "body": "Commenting, commenting everyone loves to comment",
-        "article_id": 2,
-        "author": "butter_bridge",
-        "votes": 0,
-        "created_at": "2024-02-21T11:31:06.799Z"
+          "comment_id": 19,
+          "body": "Commenting, commenting everyone loves to comment",
+          "article_id": 2,
+          "author": "butter_bridge",
+          "votes": 0,
+          "created_at": "2024-02-21T11:31:06.799Z"
         }
       ]
     }
@@ -84,14 +84,21 @@
     "description": "Will change the ammount of votes for the selected article",
     "queries": [],
     "exampleResponse": {
-        "article_id": 3,
-        "title": "Eight pug gifs that remind me of mitch",
-        "topic": "mitch",
-        "author": "icellusedkars",
-        "body": "some gifs",
-        "created_at": "2020-11-03T09:12:00.000Z",
-        "votes": 5,
-        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      "article_id": 3,
+      "title": "Eight pug gifs that remind me of mitch",
+      "topic": "mitch",
+      "author": "icellusedkars",
+      "body": "some gifs",
+      "created_at": "2020-11-03T09:12:00.000Z",
+      "votes": 5,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
+  },
+  "DELETE /api/comments/comment_id": {
+    "description": "Will delete a specific comment selected by the comment_id",
+    "queries": [],
+    "exampleResponse": {
+      "Status": 204
     }
   }
 }

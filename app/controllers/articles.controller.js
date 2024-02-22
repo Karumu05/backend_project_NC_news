@@ -63,7 +63,6 @@ exports.patchArticleVotes = (request, response, next) => {
 
     return Promise.all([updateArticleVotes(article_id, inc_votes),checkExists("articles", "article_id", article_id)])
     .then((result) => {
-        console.log(result[0]);
         response.status(201).send({article: result[0]})
     })
     .catch((error) => {
@@ -71,3 +70,4 @@ exports.patchArticleVotes = (request, response, next) => {
     })
 
 }
+ 

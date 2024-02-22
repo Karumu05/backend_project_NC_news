@@ -284,3 +284,34 @@ describe('PATCH /api/articles/:article_id', () => {
     })
   });
 });
+
+describe('DELETE /api/comments/:comment_id', () => {
+  it('should respond with an appropriate status code with no content', () => {
+      return request(app)
+      .delete('/api/comments/1')
+      .expect(204)
+      .then((result) => {
+        const {body} = result
+        expect(body).toEqual({})
+        return db.query('SELECT * FROM comments')
+      }).then((result) => {
+        expect(result.rows.length).toBe(17)
+      })
+  });
+  it('should respond with code 404 when given a valid but non-existant ID', () => {
+    return request(app)
+    .delete('/api/comments/9999')
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe('Not found')
+    })
+  });
+  it('should respond with a code of 400 when given an invalid ID', () => {
+      return request(app)
+      .delete('/api/comments/mushroom')
+      .expect(400)
+      .then((result) => {
+        expect(result.body.msg).toBe('Bad request')
+      })
+  });
+});
