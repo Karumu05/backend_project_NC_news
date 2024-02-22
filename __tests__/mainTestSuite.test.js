@@ -235,3 +235,52 @@ describe('POST /api/articles/:article_id/comments', () => {
     })
   });
 });
+
+describe('PATCH /api/articles/:article_id', () => {
+  it('should respond with an updated article changing the number of votes', () => {
+    return request(app)
+    .patch('/api/articles/3')
+    .send({
+      inc_votes: 5
+    })
+    .expect(201)
+    .then((result) => {
+      const {body} = result
+      expect(body.article[0]['votes']).toBe(5)
+      expect(body.article[0]['article_id']).toBe(3)
+    })
+  });
+  it('should respond with an appropriate error message when given a valid but non-existent id', () => {
+    return request(app)
+    .patch('/api/articles/999999')
+    .send({
+      inc_votes: 5
+    })
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe('Not found')
+    })
+  });
+  it('should respond with an appropriate error message when given an invalid id', () => {
+    return request(app)
+    .patch('/api/articles/mushroom')
+    .send({
+      inc_votes: 5
+    })
+    .expect(400)
+    .then((result) => {
+      expect(result.body.msg).toBe('Bad request')
+    })
+  });
+  it('should respond with an appropriate error message when needed input data is missing', () => {
+    return request(app)
+    .patch('/api/articles/3')
+    .send({
+      smilingBlobfish: 9999
+    })
+    .expect(400)
+    .then((result) => {
+      expect(result.body.msg).toBe('Bad request')
+    })
+  });
+});

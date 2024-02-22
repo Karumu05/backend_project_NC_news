@@ -3,6 +3,7 @@ const {
   getArticlesWithCommentCount,
   selectCommentById,
   insertCommentToArticle,
+  updateArticleVotes,
 } = require("../models/articles.model");
 const { checkExists } = require("../../db/seeds/utils");
 
@@ -55,3 +56,18 @@ exports.postCommentByArticle = (request, response, next) => {
       next(error);
     });
 };
+
+exports.patchArticleVotes = (request, response, next) => {
+    const {article_id} = request.params
+    const {inc_votes} = request.body
+
+    return Promise.all([updateArticleVotes(article_id, inc_votes),checkExists("articles", "article_id", article_id)])
+    .then((result) => {
+        console.log(result[0]);
+        response.status(201).send({article: result[0]})
+    })
+    .catch((error) => {
+        next(error)
+    })
+
+}
