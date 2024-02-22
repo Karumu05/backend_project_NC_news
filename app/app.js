@@ -9,6 +9,7 @@ const {
     getAllArticles,
     getCommentsByArticle,
     postCommentByArticle,
+    patchArticleVotes,
 } = require('./controllers/articles.controller')
 
 app.use(express.json())
@@ -21,14 +22,17 @@ app.get('/api/articles/:article_id/comments', getCommentsByArticle)
 
 app.post('/api/articles/:article_id/comments', postCommentByArticle)
 
+app.patch('/api/articles/:article_id', patchArticleVotes)
+
 
 app.use((err, request, response, next) => {
 
-    if (err.code === '23503'){
+
+    if (err.code === '23503' ){
         response.status(404).send({msg: 'Not found'})
     }
 
-    if (err.code === '22P02'){
+    if (err.code === '22P02' || err.code === '23502'){
         response.status(400).send({msg: 'Bad request'})
     }
 
