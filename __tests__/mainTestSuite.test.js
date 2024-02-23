@@ -132,6 +132,9 @@ describe('GET /api/articles', () => {
       const {articles} = result.body
       expect(articles).toBeSortedBy('topic')
       expect(articles[0].article_id).toBe(5)
+      articles.forEach((article) => {
+        expect(article['topic']).toBe('cats')
+      })
     })
   });
   it('should respond with 404 if a topic that does not exist is inputted', () => {
@@ -141,6 +144,16 @@ describe('GET /api/articles', () => {
     .then((result) => {
       expect(result.body.msg).toBe('Not found')
     })
+  });
+  it('should respond with an empty array if the topic does exist but has no articles', () => {
+    return request(app)
+    .get('/api/articles?topic=paper')
+    .expect(200)
+    .then((result) => {
+      expect(result.body.articles.length).toBe(0)
+      expect(Array.isArray(result.body.articles)).toBe(true)
+    })
+
   });
 });
 
