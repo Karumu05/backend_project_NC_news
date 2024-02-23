@@ -122,6 +122,24 @@ describe('GET /api/articles', () => {
       expect(articles).toBeSortedBy('created_at', {descending: true})
     })
   });
+  it('should respond with the articles of a queried topic', () => {
+    return request(app)
+    .get('/api/articles?topic=cats')
+    .expect(200)
+    .then((result) => {
+      const {articles} = result.body
+      expect(articles).toBeSortedBy('topic')
+      expect(articles[0].article_id).toBe(5)
+    })
+  });
+  it('should respond with 404 if a topic that does not exist is inputted', () => {
+    return request(app)
+    .get('/api/articles?topic=asakusa')
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe('Not found')
+    })
+  });
 });
 
 describe('GET /api/articles/:article_id/comments', () => {
