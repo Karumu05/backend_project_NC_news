@@ -3,7 +3,7 @@
 
 Here is the link to the live API
 
-*https://project-nc-news-9s8b.onrender.com/*
+*https://project-nc-news-9s8b.onrender.com/api/*
 
 My project focuses on the development of an Application Programming Interface (API) based on a news website. 
  

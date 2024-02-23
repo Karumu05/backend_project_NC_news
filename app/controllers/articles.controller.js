@@ -21,14 +21,22 @@ exports.getArticleById = (request, response, next) => {
 exports.getAllArticles = async (request, response, next) => {
   const { topic } = request.query;
 
-  getArticlesWithCommentCount(topic)
+  if(topic){
+    return Promise.all([checkExists("topics", "slug", topic), 
+    getArticlesWithCommentCount(topic)
+  ])
+  .then((result) => {
+    response.status(200).send({articles: result[1]})
+  })
+  .catch(next)
+  }
+
+ getArticlesWithCommentCount(topic)
     .then((result) => {
-      if (result.length === 0) {
-        response.status(404).send({ msg: "Not found" });
-      }
       response.status(200).send({ articles: result });
     })
     .catch((err) => {
+
       next(err);
     });
 };
