@@ -18,13 +18,18 @@ exports.getArticleById = (request, response, next) => {
     });
 };
 
-exports.getAllArticles = (request, response, next) => {
-  const { author, topic } = request.query;
-  getArticlesWithCommentCount(author, topic)
+exports.getAllArticles = async (request, response, next) => {
+  const { topic } = request.query;
+
+  getArticlesWithCommentCount(topic)
     .then((result) => {
+      if (result.length === 0){
+        response.status(404).send({msg: "Not found"})
+      }
       response.status(200).send({ articles: result });
     })
     .catch((err) => {
+      console.log(err);
       next(err);
     });
 };

@@ -12,7 +12,7 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
-exports.getArticlesWithCommentCount = (author, topic) => {
+exports.getArticlesWithCommentCount = (topic) => {
   const queryVals = [];
   let queryStr = ` 
 SELECT
@@ -23,20 +23,9 @@ FROM
 LEFT JOIN
     comments ON articles.article_id = comments.article_id`;
 
-  if (author || topic) {
-    queryStr += ` WHERE`;
-    conditions = [];
-    if (author) {
-      conditions.push(`articles.author = $1`);
-      queryVals.push(author);
-    }
-
-    if (topic) {
-      conditions.push(` articles.topic=$2`);
-      queryVals.push(topic);
-    }
-
-    queryStr += conditions.join(` AND `);
+  if(topic){
+    queryStr += ` WHERE articles.topic = $1`
+    queryVals.push(topic)
   }
 
   queryStr += ` GROUP BY
@@ -45,6 +34,7 @@ ORDER BY
     articles.created_at DESC;`;
 
   return db.query(queryStr, queryVals).then((result) => {
+
     return result.rows;
   });
 };
