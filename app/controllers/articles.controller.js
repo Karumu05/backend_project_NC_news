@@ -23,13 +23,12 @@ exports.getAllArticles = async (request, response, next) => {
 
   getArticlesWithCommentCount(topic)
     .then((result) => {
-      if (result.length === 0){
-        response.status(404).send({msg: "Not found"})
+      if (result.length === 0) {
+        response.status(404).send({ msg: "Not found" });
       }
       response.status(200).send({ articles: result });
     })
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };
@@ -63,16 +62,17 @@ exports.postCommentByArticle = (request, response, next) => {
 };
 
 exports.patchArticleVotes = (request, response, next) => {
-    const {article_id} = request.params
-    const {inc_votes} = request.body
+  const { article_id } = request.params;
+  const { inc_votes } = request.body;
 
-    return Promise.all([updateArticleVotes(article_id, inc_votes),checkExists("articles", "article_id", article_id)])
+  return Promise.all([
+    updateArticleVotes(article_id, inc_votes),
+    checkExists("articles", "article_id", article_id),
+  ])
     .then((result) => {
-        response.status(201).send({article: result[0]})
+      response.status(201).send({ article: result[0] });
     })
     .catch((error) => {
-        next(error)
-    })
-
-}
- 
+      next(error);
+    });
+};
