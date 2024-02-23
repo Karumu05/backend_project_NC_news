@@ -59,6 +59,7 @@ describe("GET /api/articles/:article_id", () => {
         expect(article[0]["author"]).toBe("butter_bridge");
         expect(article[0]["title"]).toBe("Living in the shadow of a great man");
         expect(article[0]["article_id"]).toBe(1);
+        expect(article[0]["comment_count"]).toBe(11)
         const articleKeys = [
           "article_id",
           "title",
@@ -68,6 +69,7 @@ describe("GET /api/articles/:article_id", () => {
           "created_at",
           "votes",
           "article_img_url",
+          "comment_count"
         ];
         expect(Object.keys(article[0])).toEqual(articleKeys)
       });
