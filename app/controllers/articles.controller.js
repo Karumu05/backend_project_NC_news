@@ -19,26 +19,30 @@ exports.getArticleById = (request, response, next) => {
 };
 
 exports.getAllArticles = async (request, response, next) => {
-  const { topic } = request.query;
+  const { topic, sort_by, order} = request.query;
+
 
   if(topic){
     return Promise.all([checkExists("topics", "slug", topic), 
-    getArticlesWithCommentCount(topic)
+    getArticlesWithCommentCount(topic, sort_by, order)
   ])
   .then((result) => {
     response.status(200).send({articles: result[1]})
   })
-  .catch(next)
+  .catch((err) => {
+    next(err)
+  })
   }
 
- getArticlesWithCommentCount(topic)
+    getArticlesWithCommentCount(topic, sort_by, order)
     .then((result) => {
+
       response.status(200).send({ articles: result });
     })
     .catch((err) => {
-
       next(err);
     });
+
 };
 
 exports.getCommentsByArticle = (request, response, next) => {

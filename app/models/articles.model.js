@@ -25,8 +25,18 @@ GROUP BY
     });
 };
 
-exports.getArticlesWithCommentCount = (topic) => {
-  const queryVals = [];
+exports.getArticlesWithCommentCount = (topic, sort_by = 'created_at', order = 'desc') => {
+
+  const acceptedQueries = ['article_id', 'title', 'topic', 'author', 'created_at', 'votes', 'comment_count']
+
+  if(!acceptedQueries.includes(sort_by)){
+    return Promise.reject({status: 400, msg: 'Bad request'})
+  }
+
+  if(!['asc', 'desc'].includes(order)){
+    return Promise.reject({status: 400, msg: 'Bad request'})
+  }
+
   let queryStr = ` 
 SELECT
     articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
@@ -34,22 +44,32 @@ SELECT
 FROM
     articles
 LEFT JOIN
-    comments ON articles.article_id = comments.article_id`;
+    comments ON articles.article_id = comments.article_id `
 
   if(topic){
-    queryStr += ` WHERE articles.topic = $1`
-    queryVals.push(topic)
+    queryStr += 
+    `WHERE articles.topic = $1
+      GROUP BY articles.article_id
+      ORDER BY ${sort_by} ${order}`
+
+    return db.query(queryStr, [topic])
+      .then(({rows, rowCount}) => {
+        if(rowCount === 0){
+          return Promise.reject({status: 200, msg: 'No articles with this topic'})
+        }
+        return rows
+      })
+  } else {
+    queryStr +=
+    `GROUP BY articles.article_id
+    ORDER BY ${sort_by} ${order}`
+
+    return db.query(queryStr)
+    
+    .then(({rows}) => {
+      return rows
+    })
   }
-
-  queryStr += ` GROUP BY
-    articles.article_id
-ORDER BY
-    articles.created_at DESC;`;
-
-  return db.query(queryStr, queryVals).then((result) => {
-
-    return result.rows;
-  });
 };
 
 exports.selectCommentById = (article_id) => {
